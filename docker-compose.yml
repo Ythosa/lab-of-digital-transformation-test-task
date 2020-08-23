@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+    server:
+        container_name: lab-of-dig-transfmation-server
+        build: ./server
+        command: npm run start 
+        restart: unless-stopped
+        ports: 
+            - "9000:9000"
+        environment: 
+            - PORT=9000
+            - MONGO_URL=mongodb://server_db:27017/server
+        depends_on: 
+            - server_db
+        networks:
+            - lab-of-dig-transfmation
+
+    server_db:
+        container_name: lab-of-dig-transfmation-server-db
+        image: mongo:latest
+        volumes:
+            - mongodb_server:/data/db
+        networks: 
+            - lab-of-dig-transfmation
+
+volumes:
+    mongodb_server:
+
+networks: 
+    lab-of-dig-transfmation:
+        driver: bridge
